@@ -7,7 +7,6 @@ const cards = document.querySelector('.cards')
 
 axios.get('https://api.github.com/users/kristinbarr')
   .then((data) => {
-    console.log(data.data.location)
     cards.appendChild(cardCreator(data.data))
     const followersURL = data.data.followers_url
     return axios.get(followersURL)
@@ -15,7 +14,10 @@ axios.get('https://api.github.com/users/kristinbarr')
   .then((data) => {
     const followersArray = data.data
     followersArray.forEach(follower => {
-      cards.appendChild(cardCreator(follower))
+      axios.get(follower.url)
+      .then(data => {
+        cards.appendChild(cardCreator(data.data))
+      })
     })
   })
   .catch(error => {
