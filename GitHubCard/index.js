@@ -74,6 +74,22 @@ function cardCreator(obj) {
   const following = document.createElement('p')
   const bio = document.createElement('p')
 
+  card.classList.add('card')
+  cardInfo.classList.add('card-info')
+  name.classList.add('name')
+  username.classList.add('username')
+
+  img.setAttribute('src', `${obj.avatar_url}`)
+  name.textContent = obj.name
+  username.textContent = obj.login
+  location.textContent = `Location: ${obj.location}`
+  profile.textContent = `Profile: `
+  pageUrl.setAttribute('href', `${obj.html_url}`)
+  pageUrl.textContent = `${obj.html_url}`
+  followers.textContent = `Followers: ${obj.followers}`
+  following.textContent = `Following: ${obj.following}`
+  bio.textContent = `${obj.bio}`
+
   card.appendChild(img)
   card.appendChild(cardInfo)
   cardInfo.appendChild(name)
@@ -84,21 +100,6 @@ function cardCreator(obj) {
   cardInfo.appendChild(followers)
   cardInfo.appendChild(following)
   cardInfo.appendChild(bio)
-
-  card.classList.add('card')
-  img.setAttribute('src', `${obj.avatar_url}`)
-  cardInfo.classList.add('card-info')
-  name.classList.add('name')
-  name.textContent = obj.name
-  username.classList.add('username')
-  username.textContent = obj.login
-  location.textContent = `Location: ${obj.location}`
-  profile.textContent = `Profile: `
-  pageUrl.setAttribute('href', `${obj.html_url}`)
-  pageUrl.textContent = `${obj.html_url}`
-  followers.textContent = `Followers: ${obj.followers}`
-  following.textContent = `Following: ${obj.following}`
-  bio.textContent = `${obj.bio}`
 
   return card
 }
