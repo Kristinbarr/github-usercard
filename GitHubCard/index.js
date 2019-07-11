@@ -3,16 +3,26 @@
   https://api.github.com/users/<your name>
 */
 
+const cards = document.querySelector('.cards')
+
 axios.get('https://api.github.com/users/kristinbarr')
   .then((data) => {
-    const cards = document.querySelector('.cards')
-    cards.appendChild(myFunc(data.data))
+    console.log(data.data.location)
+    cards.appendChild(cardCreator(data.data))
+    const followersURL = data.data.followers_url
+    return axios.get(followersURL)
+  })
+  .then((data) => {
+    const followersArray = data.data
+    followersArray.forEach(follower => {
+      cards.appendChild(cardCreator(follower))
+    })
+  })
+  .catch(error => {
+    console.log('something went wrong >_<', error)
   })
 
-
-/* Step 2: Inspect and study the data coming back, this is YOUR
-  github info! You will need to understand the structure of this
-  data in order to use it to build your component function
+/* Step 2: Inspect and study the data coming back, this is YOUR github info! You will need to understand the structure of this data in order to use it to build your component function.
 
   Skip to Step 3.
 */
@@ -21,21 +31,16 @@ axios.get('https://api.github.com/users/kristinbarr')
   create a new component and add it to the DOM as a child of .cards
 */
 
-/* Step 5: Now that you have your own card getting added to the DOM, either
-          follow this link in your browser https://api.github.com/users/<Your github name>/followers
-          , manually find some other users' github handles, or use the list found
-          at the bottom of the page. Get at least 5 different Github usernames and add them as
-          Individual strings to the friendsArray below.
+/* Step 5: Now that you have your own card getting added to the DOM, either follow this link in your browser https://api.github.com/users/<Your github name>/followers, manually find some other users' github handles, or use the list found at the bottom of the page. Get at least 5 different Github usernames and add them as Individual strings to the friendsArray below.
 
-          Using that array, iterate over it, requesting data for each user, creating a new card for each
-          user, and adding that card to the DOM.
+  Using that array, iterate over it, requesting data for each user, creating a new card for each user, and adding that card to the DOM.
 */
+
 
 const followersArray = []
 
-
-/* Step 3: Create a function that accepts a single object as its only argument,
-          Using DOM methods and properties, create a component that will return the following DOM element:
+/* Step 3: Create a function that accepts a single object as its only argument.
+Using DOM methods and properties, create a component that will return the following DOM element:
 
 <div class="card">
   <img src={image url of user} />
@@ -53,7 +58,7 @@ const followersArray = []
 </div>
 */
 
-function myFunc(obj) {
+function cardCreator(obj) {
 
   const card = document.createElement('div')
   const img = document.createElement('img')
