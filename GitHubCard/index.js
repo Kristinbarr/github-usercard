@@ -7,7 +7,10 @@ const cards = document.querySelector('.cards')
 
 axios.get('https://api.github.com/users/kristinbarr')
   .then((data) => {
-    cards.appendChild(cardCreator(data.data))
+    const calendar = document.querySelector('.calendar')
+    const cal = new GitHubCalendar(calendar, `${data.data.login}`)
+
+    cards.appendChild(cardCreator(data.data, cal))
     const followersURL = data.data.followers_url
     return axios.get(followersURL)
   })
@@ -26,20 +29,18 @@ axios.get('https://api.github.com/users/kristinbarr')
 
 /* Step 2: Inspect and study the data coming back, this is YOUR github info! You will need to understand the structure of this data in order to use it to build your component function.
 
-  Skip to Step 3.
+Skip to Step 3.
 */
 
-/* Step 4: Pass the data received from Github into your function,
-  create a new component and add it to the DOM as a child of .cards
+/* Step 4: Pass the data received from Github into your function, create a new component and add it to the DOM as a child of .cards
 */
 
 /* Step 5: Now that you have your own card getting added to the DOM, either follow this link in your browser https://api.github.com/users/<Your github name>/followers, manually find some other users' github handles, or use the list found at the bottom of the page. Get at least 5 different Github usernames and add them as Individual strings to the friendsArray below.
 
-  Using that array, iterate over it, requesting data for each user, creating a new card for each user, and adding that card to the DOM.
+Using that array, iterate over it, requesting data for each user, creating a new card for each user, and adding that card to the DOM.
 */
 
-
-const followersArray = []
+// const followersArray = []
 
 /* Step 3: Create a function that accepts a single object as its only argument.
 Using DOM methods and properties, create a component that will return the following DOM element:
@@ -56,12 +57,12 @@ Using DOM methods and properties, create a component that will return the follow
     <p>Followers: {users followers count}</p>
     <p>Following: {users following count}</p>
     <p>Bio: {users bio}</p>
+    <span class="expand-button"></span>
   </div>
 </div>
 */
 
-function cardCreator(obj) {
-
+function cardCreator(obj, cal) {
   const card = document.createElement('div')
   const img = document.createElement('img')
   const cardInfo = document.createElement('div')
@@ -69,37 +70,49 @@ function cardCreator(obj) {
   const username = document.createElement('p')
   const location = document.createElement('p')
   const profile = document.createElement('p')
-  const pageUrl = document.createElement('a')
+  const profileUrl = document.createElement('a')
   const followers = document.createElement('p')
   const following = document.createElement('p')
   const bio = document.createElement('p')
+  const heatmap = document.createElement('div')
+  const expandButton = document.createElement('span')
 
   card.classList.add('card')
   cardInfo.classList.add('card-info')
   name.classList.add('name')
   username.classList.add('username')
+  heatmap.classList.add('calendar')
+  expandButton.classList.add('expandButton')
 
-  img.setAttribute('src', `${obj.avatar_url}`)
+  img.src = `${obj.avatar_url}`
   name.textContent = obj.name
   username.textContent = obj.login
   location.textContent = `Location: ${obj.location}`
   profile.textContent = `Profile: `
-  pageUrl.setAttribute('href', `${obj.html_url}`)
-  pageUrl.textContent = `${obj.html_url}`
+  profileUrl.href = `${obj.html_url}`
+  profileUrl.textContent = `${obj.html_url}`
   followers.textContent = `Followers: ${obj.followers}`
   following.textContent = `Following: ${obj.following}`
-  bio.textContent = `${obj.bio}`
+  bio.textContent = `Bio: ${obj.bio}`
+  expandButton.textContent = 'expand'
+  // heatmap.textContent = cal
+  // heatmap.textContent = new GitHubCalendar(`.calendar`, `${obj.login}`)
 
   card.appendChild(img)
   card.appendChild(cardInfo)
+  card.appendChild(expandButton)
   cardInfo.appendChild(name)
   cardInfo.appendChild(username)
   cardInfo.appendChild(location)
   cardInfo.appendChild(profile)
-  profile.appendChild(pageUrl)
+  profile.appendChild(profileUrl)
   cardInfo.appendChild(followers)
   cardInfo.appendChild(following)
   cardInfo.appendChild(bio)
+
+  expandButton.addEventListener('click', (event) => {
+    card.classList.toggle('article-open')
+  })
 
   return card
 }
