@@ -11,6 +11,7 @@ axios.get('https://api.github.com/users/kristinbarr')
     const cal = new GitHubCalendar(calendar, `${data.data.login}`)
 
     cards.appendChild(cardCreator(data.data, cal))
+
     const followersURL = data.data.followers_url
     return axios.get(followersURL)
   })
@@ -112,6 +113,7 @@ function cardCreator(obj, cal) {
 
   expandButton.addEventListener('click', (event) => {
     card.classList.toggle('article-open')
+    // card.style.height = `${card.scrollHeight}px`
   })
 
   return card
